@@ -1,6 +1,6 @@
 // add middlewares here related to projects
-const projectInfo = require('./projects-model');
 
+const projectInfo = require('../projects/projects-model');
 
 function logger(req, res, next) {
   const time = new Date().toISOString()
@@ -33,5 +33,8 @@ module.exports = {
   validateField,
   validateProjectId
 };
+
+
+
 
 
