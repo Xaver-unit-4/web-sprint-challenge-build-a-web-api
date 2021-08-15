@@ -1,7 +1,8 @@
 // Write your "projects" router here!
 const express = require('express');
 const projectInfo = require('./projects-model');
-const { validateField } = require('./projects-middleware');
+const actionInfo = require('../actions/actions-model');
+const { validateField, validateProjectId } = require('./projects-middleware');
 const router = express.Router();
 
 
@@ -49,6 +50,30 @@ router.put('/:id', validateField, async (req, res) => {
       console.log(error)
       res.status(500).json({
         message: "Error updating projects",
+      })
+    })
+})
+
+router.delete('/:id', async (req,res) => {
+  await projectInfo.remove(req.project.id);
+  res.status(200).json(req.project);
+})
+
+router.get('/:id/actions', validateProjectId, async (req, res) => {
+  await actionInfo.get(req.params.id)
+    .then((actionID) => {
+      if (actionID) {
+      res.status(200).json(actionID)
+      } else {
+        res.status(404).json({
+          message: "action not found"
+        })
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+      res.status(500).json({
+        message: "Error viewing actions",
       })
     })
 })

@@ -33,7 +33,28 @@ router.post('/', validateProjectId, validateField, async (req,res) => {
   res.status(200).json(req.body);
 });
 
+router.put('/:id', validateField, async (req, res) => {
+  await actionInfo.get(req.params.id)
+    .then((actionID) => {
+      if (actionID) {
+      res.status(200).json(actionID)
+      } else {
+        res.status(404).json({
+          message: "action not found"
+        })
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+      res.status(500).json({
+        message: "Error updating actions",
+      })
+    })
+})
 
-
+router.delete('/:id', async (req,res) => {
+  await actionInfo.remove(req.action.id);
+  res.status(200).json(req.action);
+})
 
 module.exports = router
